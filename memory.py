@@ -1,3 +1,4 @@
+
 # implementation of card game - Memory
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui 
@@ -6,9 +7,14 @@ import random
 print "HELLO WORLD"
 
 HEIGHT = 100
+clicked = []
+
 
 # helper function to initialize globals
 def new_game():
+    global state, counter
+    state = 0
+    counter = 0
     card_deck()
     exposed_card()
 
@@ -22,17 +28,35 @@ def card_deck():
 def exposed_card():
     global exposed
     exposed = [False] * 18
-#    exposed = [True] * 18
-
 
 # define event handlers
 def click(pos):
-    global exposed
+    global exposed, state, deck, clicked, counter
+    print pos[0]
     index = pos[0] // 50
-    if exposed[index] == False:
-        exposed[index] = True
+    if state == 0:
+        if exposed[index] != True:
+            exposed[index] = True
+            clicked.append(index)
+            state = 1
+            counter += 1
+    elif state == 1:
+        if exposed[index] != True:
+            exposed[index] = True
+            clicked.append(index)
+            state = 2
+            counter += 1
     else:
-        exposed[index] = False
+        state = 1
+        if deck[clicked[0]] != deck[clicked[1]]:
+            exposed[clicked[0]], exposed[clicked[1]] = False, False        
+        if exposed[index] != True:
+            counter += 1
+            clicked = []
+            clicked.append(index)
+            exposed[index] = True
+
+
                         
 # cards are logically 50x100 pixels in size    
 def draw(canvas):
