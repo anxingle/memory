@@ -1,11 +1,18 @@
 
 # implementation of card game - Memory
+#to do:
+# game logic is confusing - some potential changes: 
+# - include another list for state of cards in game logic
+# to distinguish between won cards and cards that are just turned over
+# (another list moeans I could change draw handler to draw won cards and played
+	# cards in difference ways)
+# add highest score
+# add two platers
+# add stats
+# refactor into an OOP 
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui 
 import random
-
-print "HELLO WORLD"
-
 HEIGHT = 100
 clicked = []
 
@@ -27,15 +34,15 @@ def card_deck():
     
 def exposed_card():
     global exposed
-    exposed = [False] * 18
+    exposed = [False] * 18                      
 
 # define event handlers
 def click(pos):
     global exposed, state, deck, clicked, counter
-    print pos[0]
+    print deck
     index = pos[0] // 50
     if state == 0:
-        if exposed[index] != True:
+        if not exposed[index]                                         :
             exposed[index] = True
             clicked.append(index)
             state = 1
@@ -47,17 +54,18 @@ def click(pos):
             state = 2
             counter += 1
     else:
-        state = 1
         if deck[clicked[0]] != deck[clicked[1]]:
             exposed[clicked[0]], exposed[clicked[1]] = False, False        
-        if exposed[index] != True:
+            clicked = []
+            state = 0
+        if not exposed[index]:
             counter += 1
             clicked = []
             clicked.append(index)
             exposed[index] = True
+            state = 1
 
-
-                        
+                     
 # cards are logically 50x100 pixels in size    
 def draw(canvas):
     global deck
